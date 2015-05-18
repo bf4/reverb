@@ -4,11 +4,14 @@ module Recorder
   ROOT = Pathname File.expand_path("../..", __FILE__)
   private_constant :ROOT
   # Recorder root pathname
+  # :nocov:
   def self.root
     ROOT
   end
+  # :nocov:
 
   module Tasks
+    # :nocov:
     # @api private
     def self.install
       # Any default tasks are removed
@@ -23,6 +26,7 @@ module Recorder
         Rake::Task.define_task(default: [:spec])
       end
     end
+    # :nocov:
   end
   # Define Rake tasks
   Tasks.install if defined?(Rake)
