@@ -1,6 +1,6 @@
 RSpec.describe Recorder, type: :model do
   describe "parses a record delimited by" do
-    {pipes: "|", commas: ",", spaces: " "}.each do |name, delimiter|
+    { pipes: "|", commas: ",", spaces: " " }.each do |name, delimiter|
       it "#{name}: '#{delimiter}' delimited" do
         record = build_rows([
           %w[LastName FirstName Gender FavoriteColor DateOfBirth],
@@ -15,7 +15,7 @@ RSpec.describe Recorder, type: :model do
           "Bill",
           "Male",
           "Blue",
-          Date.new(2015,5,18),
+          Date.new(2015, 5, 18),
         ]
         first_row = actual.first
         headers = [:lastname, :firstname, :gender, :favoritecolor, :dateofbirth]
@@ -27,9 +27,9 @@ RSpec.describe Recorder, type: :model do
   end
 
   def build_rows(rows, delimiter:)
-    rows.map do |fields|
+    rows.map { |fields|
       build_row(fields, delimiter: delimiter)
-    end.join("\n")
+    }.join("\n")
   end
 
   def build_row(fields, delimiter:)

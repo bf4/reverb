@@ -30,7 +30,7 @@ module Recorder
   require "csv"
   def self.parse(delimited_record)
     string_field_converter = lambda {|field|
-      field.strip rescue field
+      field.strip rescue field # rubocop:disable Style/RescueModifier
     }
     CSV.parse(delimited_record,
               headers: true,
