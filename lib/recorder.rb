@@ -26,4 +26,19 @@ module Recorder
   end
   # Define Rake tasks
   Tasks.install if defined?(Rake)
+
+  require "csv"
+  def self.parse(delimited_record)
+    string_field_converter = lambda {|field|
+      field.strip rescue field
+    }
+    CSV.parse(delimited_record,
+              headers: true,
+              return_headers: false,
+              header_converters: :symbol,
+              converters: [string_field_converter, :date],
+              col_sep: "|",
+              skip_blanks: true
+             )
+  end
 end
