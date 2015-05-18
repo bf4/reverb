@@ -41,7 +41,7 @@ RSpec.describe Recorder, type: :model do
     end
   end
 
-  it "builds up parsed records" do
+  it "builds up and combines parsed records" do
     builder = Recorder::Builder.new
 
     data_row1 = %w[Fleischer Benjamin Male Blue] << Date.new(2015, 10, 5)
@@ -55,6 +55,13 @@ RSpec.describe Recorder, type: :model do
     actual = builder.records
     expect(actual.size).to eq(2)
     expect(actual.flat_map { |table| table.map(&:fields) }).to match_array [
+      data_row1,
+      data_row2
+    ]
+
+    combined_records = builder.combine_records!
+    expect(builder.records.size).to eq(1)
+    expect(combined_records.first.map(&:fields)).to match_array [
       data_row1,
       data_row2
     ]

@@ -71,5 +71,18 @@ module Recorder
     def parse(delimited_record)
       records << Recorder.parse(delimited_record)
     end
+
+    # Destructively combine all records into one table
+    # by appending the first table with rows removed from the other tables
+    def combine_records!
+      return records if records.size < 2
+      table = records.shift
+      records.each do |record|
+        record.size.times.with_index do |index|
+          table << record.delete(index)
+        end
+      end
+      @records = [table]
+    end
   end
 end
