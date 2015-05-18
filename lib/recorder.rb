@@ -28,17 +28,33 @@ module Recorder
   Tasks.install if defined?(Rake)
 
   require "csv"
-  def self.parse(delimited_record)
-    string_field_converter = lambda {|field|
+  def self.string_field_converter
+    @string_field_converter ||= lambda {|field|
       field.strip rescue field # rubocop:disable Style/RescueModifier
     }
+  end
+
+  def self.parse(delimited_record, delimiter: delimiter_for(delimited_record))
     CSV.parse(delimited_record,
               headers: true,
               return_headers: false,
               header_converters: :symbol,
               converters: [string_field_converter, :date],
-              col_sep: "|",
+              col_sep: delimiter,
               skip_blanks: true
              )
+  end
+
+  def self.delimiters
+    @delimiters ||= ["|", ",", " "]
+  end
+
+  def self.delimiter_for(delimited_record)
+    delimiters.find {|delimiter|
+      first_row = CSV.new(delimited_record, col_sep: delimiter).each { |row|
+        break row
+      }
+      first_row.size > 1
+    }
   end
 end

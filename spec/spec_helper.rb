@@ -5,8 +5,7 @@ app_root = Pathname File.expand_path("../..", __FILE__)
 spec_root = app_root.join("spec")
 
 require spec_root.join("quality_spec")
-# in spec/support/ and its subdirectories.
-Dir[app_root.join("support/**/*.rb")].each do |f| require f end
+Dir[spec_root.join("support/**/*.rb")].each do |f| require f end
 
 RSpec.configure do |config|
   config.filter_run focus: true

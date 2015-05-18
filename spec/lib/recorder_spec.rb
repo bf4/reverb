@@ -10,6 +10,16 @@ RSpec.describe Recorder, type: :model do
   let(:headers) {
     %i[lastname firstname gender favoritecolor dateofbirth]
   }
+
+  describe "identifies a record's column delimiter" do
+    DELIMITERS.each do |name, delimiter|
+      specify "as #{name}: '#{delimiter}' delimited" do
+        row = build_row(data_row, delimiter: delimiter)
+        expect(Recorder.delimiter_for(row)).to eq(delimiter)
+      end
+    end
+  end
+
   describe "parses a record delimited by" do
     DELIMITERS.each do |name, delimiter|
       # TODO: extract into shared example
