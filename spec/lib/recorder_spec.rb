@@ -41,6 +41,25 @@ RSpec.describe Recorder, type: :model do
     end
   end
 
+  it "builds up parsed records" do
+    builder = Recorder::Builder.new
+
+    data_row1 = %w[Fleischer Benjamin Male Blue] << Date.new(2015, 10, 5)
+    record1 = build_rows([header_row, data_row1], delimiter: "|")
+    builder.parse(record1)
+
+    data_row2 = %w[Zold Henrietta Female Plaid] << Date.new(2045, 5, 2)
+    record2 = build_rows([header_row, data_row2], delimiter: "|")
+    builder.parse(record2)
+
+    actual = builder.records
+    expect(actual.size).to eq(2)
+    expect(actual.flat_map { |table| table.map(&:fields) }).to match_array [
+      data_row1,
+      data_row2
+    ]
+  end
+
   def build_rows(rows, delimiter:)
     rows.map { |fields|
       build_row(fields, delimiter: delimiter)

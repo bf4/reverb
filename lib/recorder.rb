@@ -61,4 +61,15 @@ module Recorder
       first_row.size > 1
     }
   end
+
+  class Builder
+    attr_reader :records
+    def initialize
+      @records = []
+    end
+
+    def parse(delimited_record)
+      records << Recorder.parse(delimited_record)
+    end
+  end
 end
