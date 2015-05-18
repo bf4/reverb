@@ -49,12 +49,12 @@ RSpec.describe Recorder, type: :model do
     builder.parse(record1)
 
     data_row2 = %w[Zold Henrietta Female Plaid] << Date.new(2045, 5, 2)
-    record2 = build_rows([header_row, data_row2], delimiter: "|")
+    record2 = build_rows([header_row, data_row2], delimiter: " ")
     builder.parse(record2)
 
-    actual = builder.records
-    expect(actual.size).to eq(2)
-    expect(actual.flat_map { |table| table.map(&:fields) }).to match_array [
+    records = builder.records
+    expect(records.size).to eq(2)
+    expect(records.flat_map { |table| table.map(&:fields) }).to match_array [
       data_row1,
       data_row2
     ]
@@ -65,6 +65,28 @@ RSpec.describe Recorder, type: :model do
       data_row1,
       data_row2
     ]
+  end
+
+  describe "outputing views" do
+   specify  "Output1: sorted by gender (females before males) then by last name ascending" do
+      data_rows = [
+        %W[Last Woman Female Venetian 2000-09-30],
+        %W[Ultimate Man Male Martian 2000-10-31],
+        %W[Grammer Bro Male Green 2000-11-30],
+        %W[Coder Rails Female Red 2000-12-31],
+      ]
+      record = build_rows([header_row] + data_rows, delimiter: ",")
+      table = Recorder.parse(record)
+      formatted_table = Recorder::Views::Output1.format(table)
+
+      expected = [
+        %W[Coder Rails Female Red 12/31/2000],
+        %W[Last Woman Female Venetian 09/30/2000],
+        %W[Grammer Bro Male Green 11/30/2000],
+        %W[Ultimate Man Male Martian 10/31/2000],
+      ]
+      expect(formatted_table).to eq(expected)
+    end
   end
 
   def build_rows(rows, delimiter:)

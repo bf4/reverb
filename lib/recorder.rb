@@ -85,4 +85,33 @@ module Recorder
       @records = [table]
     end
   end
+
+  module Views
+    module Output1
+      def self.sort_order
+        @sort_order ||= [[:gender, :asc], [:lastname, :asc]]
+      end
+      def self.format(table)
+        data_table = table.to_a
+        headers = data_table.shift
+        dob_index = headers.index(:dateofbirth)
+        date_format = "%m/%d/%Y".freeze
+        data_table.each do |row|
+          row[dob_index] = row[dob_index].strftime(date_format)
+        end
+        data_table.sort! {|row1, row2|
+          sort_order.reduce(nil) {|comparison, (field_name, direction)|
+            field_index = headers.index(field_name)
+            break comparison unless comparison.nil? || comparison.zero?
+            case direction
+            when :asc
+              comparison = row1[field_index] <=> row2[field_index]
+            else
+              fail "Unknown sort direction #{direction.inspect}"
+            end
+            }
+        }
+      end
+    end
+  end
 end
