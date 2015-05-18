@@ -1,0 +1,9 @@
+inherit_from:
+  - config/style_guides/ruby.yml
+  - .rubocop_todo.yml
+
+# Files you want to exclude
+AllCops:
+  Exclude:
+    - !ruby/regexp /(Gemfile|Rakefile)$/
+    - !ruby/regexp /(bundle|bin|db|tasks)\/.*/
