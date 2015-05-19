@@ -59,7 +59,7 @@ module Recorder
         break row
       }
       first_row.size > 1
-    }
+    } or fail "No delimiter found for #{delimited_record}"
   end
 
   # TECHDEBT: Move into own file
@@ -91,11 +91,11 @@ module Recorder
   module Views
 
     def self.format(table, output)
-      output_const = :"Output#{output}"
-      if const_defined?(output_const)
+      if formats.include?(Integer(output))
+        output_const = :"Output#{output}"
         const_get(output_const).format(table)
       else
-        fail ArgumentError, "No such output 'Views::#{output_const}'"
+        fail ArgumentError, "No such output #{output.inspect}"
       end
     end
 
@@ -115,15 +115,16 @@ module Recorder
       end
 
       def initialize(table)
-        @data_table = table.to_a
-        @headers = data_table.shift
+        @data_table = table
+        @headers = data_table.headers
       end
 
       def format
         format_datefields!
-        data_table.sort! {|row1, row2|
+        sorted_data_rows = data_table.sort {|row1, row2|
           compare_rows(row1, row2)
         }
+        CSV::Table.new(sorted_data_rows)
       end
 
       private
@@ -131,11 +132,14 @@ module Recorder
       attr_reader :data_table, :headers
 
       def format_datefields!
-        dob_index = headers.index(:dateofbirth)
+        dob_index = :dateofbirth
         date_format = "%m/%d/%Y".freeze
         data_table.each do |row|
           row[dob_index] = row[dob_index].strftime(date_format)
         end
+      rescue TypeError
+        STDERR.puts [$!.message, __FILE__, __LINE__].join("\t".freeze)
+        raise
       end
 
       def compare_rows(row1, row2)

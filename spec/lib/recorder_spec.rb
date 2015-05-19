@@ -104,12 +104,13 @@ RSpec.describe Recorder, type: :model do
       formatted_table = Recorder::Views::Output1.format(table)
 
       expected = [
+        header_row.map(&:downcase).map(&:intern),
         %w[Coder Rails Female Red 12/31/2000],
         %w[Last Woman Female Venetian 09/30/2000],
         %w[Grammer Bro Male Green 11/30/2000],
         %w[Ultimate Man Male Martian 10/31/2000],
       ]
-      expect(formatted_table).to eq(expected)
+      expect(formatted_table.to_a).to eq(expected)
     end
 
     specify "Output2: sorted by birth date, ascending." do
@@ -124,12 +125,13 @@ RSpec.describe Recorder, type: :model do
       formatted_table = Recorder::Views::Output2.format(table)
 
       expected = [
+        header_row.map(&:downcase).map(&:intern),
         %w[Last Woman Female Venetian 09/30/2000],
         %w[Ultimate Man Male Martian 10/31/2000],
         %w[Grammer Bro Male Green 11/30/2000],
         %w[Coder Rails Female Red 12/31/2000],
       ]
-      expect(formatted_table).to eq(expected)
+      expect(formatted_table.to_a).to eq(expected)
     end
 
     specify "Output3: sorted by last name, descending." do
@@ -144,12 +146,13 @@ RSpec.describe Recorder, type: :model do
       formatted_table = Recorder::Views::Output3.format(table)
 
       expected = [
+        header_row.map(&:downcase).map(&:intern),
         %w[Ultimate Man Male Martian 10/31/2000],
         %w[Last Woman Female Venetian 09/30/2000],
         %w[Grammer Bro Male Green 11/30/2000],
         %w[Coder Rails Female Red 12/31/2000],
       ]
-      expect(formatted_table).to eq(expected)
+      expect(formatted_table.to_a).to eq(expected)
     end
 
     it "formats the output for the given output integer" do
@@ -164,12 +167,13 @@ RSpec.describe Recorder, type: :model do
       formatted_table = Recorder::Views.format(table, 3)
 
       expected = [
+        header_row.map(&:downcase).map(&:intern),
         %w[Ultimate Man Male Martian 10/31/2000],
         %w[Last Woman Female Venetian 09/30/2000],
         %w[Grammer Bro Male Green 11/30/2000],
         %w[Coder Rails Female Red 12/31/2000],
       ]
-      expect(formatted_table).to eq(expected)
+      expect(formatted_table.to_a).to eq(expected)
     end
 
     it "raises an ArgumentError for an unknown output integer" do
