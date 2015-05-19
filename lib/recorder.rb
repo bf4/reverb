@@ -138,9 +138,6 @@ module Recorder
         data_table.each do |row|
           row[dob_index] = row[dob_index].strftime(date_format)
         end
-      rescue TypeError
-        STDERR.puts [$!.message, __FILE__, __LINE__].join("\t".freeze)
-        raise
       end
 
       def compare_rows(row1, row2)

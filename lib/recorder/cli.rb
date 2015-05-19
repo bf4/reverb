@@ -56,6 +56,7 @@ module Recorder
       stderr_logger.puts msg
     end
 
+    # :nocov:
     def stdout_logger
       STDOUT
     end
@@ -63,5 +64,6 @@ module Recorder
     def stderr_logger
       STDERR
     end
+    # :nocov:
   end
 end
