@@ -1,5 +1,25 @@
+## Benjamin's Submission
+
 1. please send me 5 questions about Reverb..business/technical/culture, whatever you want. make them count
+
 2. check out our coding challenge https://reverb.com/page/dev-challenge
+
+Original README below.
+
+### Usage
+
+```sh
+exe/recorder --help
+exe/recorder --file spec/fixtures/record.csv --output 1
+```
+
+### Testing
+
+```sh
+bin/rspec # rspec only
+bin/rakea # also rubocop and possibly others
+bin/guard # continuous testing
+```
 
 ## Reverb Technical Challenge
 

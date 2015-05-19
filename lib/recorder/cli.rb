@@ -10,6 +10,8 @@ module Recorder
       @argv = argv
     end
 
+    # TODO: make output prettier
+    # TODO: confirm if delimiter should be preserved in formatted csv
     def run
       parse_options(@argv)
       delimited_record = File.read(options[:file])
@@ -22,6 +24,7 @@ module Recorder
 
     attr_reader :options
 
+    # TODO: Include sort_order defined for each view output in the help
     def parse_options(args)
       options_parser = OptionParser.new do |parser|
         executable_name = File.basename($PROGRAM_NAME)
