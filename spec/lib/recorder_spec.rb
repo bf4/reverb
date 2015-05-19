@@ -151,6 +151,36 @@ RSpec.describe Recorder, type: :model do
       ]
       expect(formatted_table).to eq(expected)
     end
+
+    it "formats the output for the given output integer" do
+      data_rows = [
+        %w[Last Woman Female Venetian 2000-09-30],
+        %w[Ultimate Man Male Martian 2000-10-31],
+        %w[Grammer Bro Male Green 2000-11-30],
+        %w[Coder Rails Female Red 2000-12-31],
+      ]
+      record = build_rows([header_row] + data_rows, delimiter: " ")
+      table = Recorder.parse(record)
+      formatted_table = Recorder::Views.format(table, 3)
+
+      expected = [
+        %w[Ultimate Man Male Martian 10/31/2000],
+        %w[Last Woman Female Venetian 09/30/2000],
+        %w[Grammer Bro Male Green 11/30/2000],
+        %w[Coder Rails Female Red 12/31/2000],
+      ]
+      expect(formatted_table).to eq(expected)
+    end
+
+    it "raises an ArgumentError for an unknown output integer" do
+      expect {
+        Recorder::Views.format(Class.new, 4)
+      }.to raise_error(ArgumentError, /no such/i)
+    end
+
+    it "knows the available outputs" do
+      expect(Recorder::Views.formats).to match_array [1,2,3]
+    end
   end
 
   def build_rows(rows, delimiter:)

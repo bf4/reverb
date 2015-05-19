@@ -89,6 +89,22 @@ module Recorder
 
   # TECHDEBT: Move into own file
   module Views
+
+    def self.format(table, output)
+      output_const = :"Output#{output}"
+      if const_defined?(output_const)
+        const_get(output_const).format(table)
+      else
+        fail ArgumentError, "No such output 'Views::#{output_const}'"
+      end
+    end
+
+    def self.formats
+      constants.map {|c|
+        Integer(c.to_s.sub(/^Output/, "")) rescue nil # rubocop:disable Style/RescueModifier
+      }.compact
+    end
+
     class View
       def self.sort_order
         fail "#{caller[0]} needs to implement #{__callee__}"
