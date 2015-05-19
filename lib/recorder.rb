@@ -62,6 +62,7 @@ module Recorder
     }
   end
 
+  # TECHDEBT: Move into own file
   class Builder
     attr_reader :records
     def initialize
@@ -86,11 +87,13 @@ module Recorder
     end
   end
 
+  # TECHDEBT: Move into own file
   module Views
-    module Output1
+    class View
       def self.sort_order
-        @sort_order ||= [[:gender, :asc], [:lastname, :asc]]
+        fail "#{caller[0]} needs to implement #{__callee__}"
       end
+
       def self.format(table)
         data_table = table.to_a
         headers = data_table.shift
@@ -105,12 +108,32 @@ module Recorder
             break comparison unless comparison.nil? || comparison.zero?
             case direction
             when :asc
-              comparison = row1[field_index] <=> row2[field_index]
+              row1[field_index] <=> row2[field_index]
+            when :desc
+              row2[field_index] <=> row1[field_index]
             else
               fail "Unknown sort direction #{direction.inspect}"
             end
-            }
+          }
         }
+      end
+    end
+
+    class Output1 < View
+      def self.sort_order
+        @sort_order ||= [[:gender, :asc], [:lastname, :asc]]
+      end
+    end
+
+    class Output2 < View
+      def self.sort_order
+        @sort_order ||= [[:dateofbirth, :asc]]
+      end
+    end
+
+    class Output3 < View
+      def self.sort_order
+        @sort_order ||= [[:lastname, :desc]]
       end
     end
   end

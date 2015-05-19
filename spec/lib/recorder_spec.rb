@@ -1,4 +1,5 @@
 RSpec.describe Recorder, type: :model do
+  # TODO: use delimiter definitions from Recorder.delimiters
   DELIMITERS =
     { pipes: "|", commas: ",", spaces: " " }
   let(:header_row) {
@@ -68,22 +69,62 @@ RSpec.describe Recorder, type: :model do
   end
 
   describe "outputing views" do
-   specify  "Output1: sorted by gender (females before males) then by last name ascending" do
+    specify "Output1: sorted by gender (females before males) then by last name ascending" do # rubocop:disable Metrics/LineLength
       data_rows = [
-        %W[Last Woman Female Venetian 2000-09-30],
-        %W[Ultimate Man Male Martian 2000-10-31],
-        %W[Grammer Bro Male Green 2000-11-30],
-        %W[Coder Rails Female Red 2000-12-31],
+        %w[Last Woman Female Venetian 2000-09-30],
+        %w[Ultimate Man Male Martian 2000-10-31],
+        %w[Grammer Bro Male Green 2000-11-30],
+        %w[Coder Rails Female Red 2000-12-31],
       ]
       record = build_rows([header_row] + data_rows, delimiter: ",")
       table = Recorder.parse(record)
       formatted_table = Recorder::Views::Output1.format(table)
 
       expected = [
-        %W[Coder Rails Female Red 12/31/2000],
-        %W[Last Woman Female Venetian 09/30/2000],
-        %W[Grammer Bro Male Green 11/30/2000],
-        %W[Ultimate Man Male Martian 10/31/2000],
+        %w[Coder Rails Female Red 12/31/2000],
+        %w[Last Woman Female Venetian 09/30/2000],
+        %w[Grammer Bro Male Green 11/30/2000],
+        %w[Ultimate Man Male Martian 10/31/2000],
+      ]
+      expect(formatted_table).to eq(expected)
+    end
+
+    specify "Output2: sorted by birth date, ascending." do
+      data_rows = [
+        %w[Ultimate Man Male Martian 2000-10-31],
+        %w[Last Woman Female Venetian 2000-09-30],
+        %w[Coder Rails Female Red 2000-12-31],
+        %w[Grammer Bro Male Green 2000-11-30],
+      ]
+      record = build_rows([header_row] + data_rows, delimiter: "|")
+      table = Recorder.parse(record)
+      formatted_table = Recorder::Views::Output2.format(table)
+
+      expected = [
+        %w[Last Woman Female Venetian 09/30/2000],
+        %w[Ultimate Man Male Martian 10/31/2000],
+        %w[Grammer Bro Male Green 11/30/2000],
+        %w[Coder Rails Female Red 12/31/2000],
+      ]
+      expect(formatted_table).to eq(expected)
+    end
+
+    specify "Output3: sorted by last name, descending." do
+      data_rows = [
+        %w[Last Woman Female Venetian 2000-09-30],
+        %w[Ultimate Man Male Martian 2000-10-31],
+        %w[Grammer Bro Male Green 2000-11-30],
+        %w[Coder Rails Female Red 2000-12-31],
+      ]
+      record = build_rows([header_row] + data_rows, delimiter: " ")
+      table = Recorder.parse(record)
+      formatted_table = Recorder::Views::Output3.format(table)
+
+      expected = [
+        %w[Ultimate Man Male Martian 10/31/2000],
+        %w[Last Woman Female Venetian 09/30/2000],
+        %w[Grammer Bro Male Green 11/30/2000],
+        %w[Coder Rails Female Red 12/31/2000],
       ]
       expect(formatted_table).to eq(expected)
     end
