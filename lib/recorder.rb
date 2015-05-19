@@ -95,27 +95,50 @@ module Recorder
       end
 
       def self.format(table)
-        data_table = table.to_a
-        headers = data_table.shift
+        new(table).format
+      end
+
+      def initialize(table)
+        @data_table = table.to_a
+        @headers = data_table.shift
+      end
+
+      def format
+        format_datefields!
+        data_table.sort! {|row1, row2|
+          compare_rows(row1, row2)
+        }
+      end
+
+      private
+
+      attr_reader :data_table, :headers
+
+      def format_datefields!
         dob_index = headers.index(:dateofbirth)
         date_format = "%m/%d/%Y".freeze
         data_table.each do |row|
           row[dob_index] = row[dob_index].strftime(date_format)
         end
-        data_table.sort! {|row1, row2|
-          sort_order.reduce(nil) {|comparison, (field_name, direction)|
-            field_index = headers.index(field_name)
-            break comparison unless comparison.nil? || comparison.zero?
-            case direction
-            when :asc
-              row1[field_index] <=> row2[field_index]
-            when :desc
-              row2[field_index] <=> row1[field_index]
-            else
-              fail "Unknown sort direction #{direction.inspect}"
-            end
-          }
+      end
+
+      def compare_rows(row1, row2)
+        self.class.sort_order.reduce(nil) {|comparison, (field_name, direction)|
+          break comparison unless comparison.nil? || comparison.zero?
+          field_index = headers.index(field_name)
+          compare_fields(row1[field_index], row2[field_index], direction)
         }
+      end
+
+      def compare_fields(field1, field2, direction)
+        case direction
+        when :asc
+          field1 <=> field2
+        when :desc
+          field2 <=> field1
+        else
+          fail "Unknown sort direction #{direction.inspect}"
+        end
       end
     end
 

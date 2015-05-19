@@ -69,6 +69,29 @@ RSpec.describe Recorder, type: :model do
   end
 
   describe "outputing views" do
+    it "must specify a sort_order" do
+      view = Class.new(Recorder::Views::View)
+      record = build_rows([header_row, data_row, data_row], delimiter: ",")
+      table = Recorder.parse(record)
+      expect {
+        view.format(table)
+      }.to raise_error(RuntimeError, /sort_order/)
+    end
+
+    it "fails when an unhandled sort_order" do
+      view = Class.new(Recorder::Views::View) do
+        def self.sort_order
+          [[:lastname, :famousness]]
+        end
+      end
+
+      record = build_rows([header_row, data_row, data_row], delimiter: ",")
+      table = Recorder.parse(record)
+      expect {
+        view.format(table)
+      }.to raise_error(RuntimeError, /unknown sort direction/i)
+    end
+
     specify "Output1: sorted by gender (females before males) then by last name ascending" do # rubocop:disable Metrics/LineLength
       data_rows = [
         %w[Last Woman Female Venetian 2000-09-30],
