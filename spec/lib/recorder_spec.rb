@@ -183,7 +183,7 @@ RSpec.describe Recorder, type: :model do
     end
 
     it "knows the available outputs" do
-      expect(Recorder::Views.formats).to match_array [1,2,3]
+      expect(Recorder::Views.formats).to match_array [1, 2, 3]
     end
   end
 

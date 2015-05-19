@@ -1,6 +1,8 @@
 require "pathname"
 
 module Recorder
+  autoload :Cli, File.expand_path("../recorder/cli", __FILE__)
+
   ROOT = Pathname File.expand_path("../..", __FILE__)
   private_constant :ROOT
   # Recorder root pathname
@@ -89,7 +91,6 @@ module Recorder
 
   # TECHDEBT: Move into own file
   module Views
-
     def self.format(table, output)
       if formats.include?(Integer(output))
         output_const = :"Output#{output}"
