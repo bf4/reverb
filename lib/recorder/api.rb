@@ -5,7 +5,6 @@
 #    -F "delimited_record=@spec/fixtures/record.csv" \
 #    http://localhost:9292/api/records
 require "grape"
-require "grape-roar"
 module Recorder
   class API < Grape::API
     version "v1", using: :accept_version_header

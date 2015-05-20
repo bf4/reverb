@@ -4,9 +4,6 @@ source "https://rubygems.org"
 # ruby "2.2.2"
 
 gem "grape", "~> 0.11"
-gem "grape-entity"
-gem "roar"
-gem "grape-roar"
 
 group :development do
   # documentation
