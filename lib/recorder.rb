@@ -2,6 +2,7 @@ require "pathname"
 
 module Recorder
   autoload :Cli, File.expand_path("../recorder/cli", __FILE__)
+  autoload :API, File.expand_path("../recorder/api", __FILE__)
 
   ROOT = Pathname File.expand_path("../..", __FILE__)
   private_constant :ROOT
