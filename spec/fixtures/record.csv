@@ -1,5 +1,5 @@
-lastname,firstname,gender,favoritecolor,dateofbirth
-Last,Woman,Female,Venetian,2000-09-30
-Ultimate,Man,Male,Martian,2000-10-31
-Grammer,Bro,Male,Green,2000-11-30
-Coder,Rails,Female,Red,2000-12-31
+LastName FirstName Gender FavoriteColor DateOfBirth
+Last Woman Female Venetian 2000-09-30
+Ultimate Man Male Martian 2000-10-31
+Grammer Bro Male Green 2000-11-30
+Coder Rails Female Red 2000-12-31
