@@ -13,19 +13,17 @@ module Recorder
     # TODO: make output prettier
     # TODO: confirm if delimiter should be preserved in formatted csv
     def run
-      parse_options(@argv)
-      delimited_record = File.read(options[:file])
-      table = Recorder.parse(delimited_record)
+      parse_options!
+      table = File.open(options[:file], "rb") do |delimited_record|
+        Recorder.parse(delimited_record)
+      end
       formatted_table = Recorder::Views.format(table, options[:output])
       log formatted_table.to_csv
     end
 
-    private
-
-    attr_reader :options
-
     # TODO: Include sort_order defined for each view output in the help
-    def parse_options(args)
+    def parse_options!
+      return unless options.empty?
       options_parser = OptionParser.new do |parser|
         executable_name = File.basename($PROGRAM_NAME)
         parser.banner = "Usage: #{executable_name} [options]"
@@ -39,17 +37,22 @@ module Recorder
         end
       end
       begin
-        options_parser.parse!(args)
+        options_parser.parse!(argv)
         file = options[:file]
+        output = options[:output]
         fail ArgumentError, "File missing" if file.nil?
+        fail ArgumentError, "Output format missing"  if output.nil?
         fail ArgumentError, "File not readable #{file.inspect}" unless File.readable?(file)
-        fail ArgumentError, "Output format missing"  if options[:output].nil?
       rescue ArgumentError, OptionParser::ParseError => e
         warn e.message
         log options_parser.help
         exit(1)
       end
     end
+
+    private
+
+    attr_reader :options, :argv
 
     def log(msg = "")
       stdout_logger.puts msg

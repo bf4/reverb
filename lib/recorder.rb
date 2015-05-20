@@ -41,14 +41,18 @@ module Recorder
   end
 
   def self.parse(delimited_record, delimiter: delimiter_for(delimited_record))
-    CSV.parse(delimited_record,
+    csv_options = {
               headers: true,
               return_headers: false,
               header_converters: :symbol,
               converters: [string_field_converter, :date],
               col_sep: delimiter,
               skip_blanks: true
-             )
+    }
+    if File.readable?(delimited_record)
+      delimited_record = File.read(delimited_record)
+    end
+    CSV.parse(delimited_record, csv_options)
   end
 
   def self.delimiters
@@ -116,13 +120,13 @@ module Recorder
       end
 
       def initialize(table)
-        @data_table = table
-        @headers = data_table.headers
+        @table = table
+        @headers = table.headers
       end
 
       def format
         format_datefields!
-        sorted_data_rows = data_table.sort {|row1, row2|
+        sorted_data_rows = table.sort {|row1, row2|
           compare_rows(row1, row2)
         }
         CSV::Table.new(sorted_data_rows)
@@ -130,12 +134,12 @@ module Recorder
 
       private
 
-      attr_reader :data_table, :headers
+      attr_reader :table, :headers
 
       def format_datefields!
         dob_index = :dateofbirth
         date_format = "%m/%d/%Y".freeze
-        data_table.each do |row|
+        table.each do |row|
           row[dob_index] = row[dob_index].strftime(date_format)
         end
       end
