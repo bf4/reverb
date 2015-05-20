@@ -12,9 +12,13 @@ module Recorder
     format :json
     prefix :api
 
+    def self.dao
+      @dao ||= Recorder::Builder.new
+    end
+
     helpers do
       def builder
-        @builder ||= Recorder::Builder.new
+        Recorder::API.dao
       end
 
       # @return [String] csv representation of table
