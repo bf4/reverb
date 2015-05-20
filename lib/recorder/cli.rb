@@ -14,9 +14,9 @@ module Recorder
     # TODO: confirm if delimiter should be preserved in formatted csv
     def run
       parse_options!
-      table = File.open(options[:file], "rb") do |delimited_record|
+      table = File.open(options[:file], "rb") { |delimited_record|
         Recorder.parse(delimited_record)
-      end
+      }
       formatted_table = Recorder::Views.format(table, options[:output])
       log formatted_table.to_csv
     end

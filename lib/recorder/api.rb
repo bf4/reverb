@@ -43,7 +43,6 @@ module Recorder
     end
 
     resources :records do
-
       desc "Post a single data line in any of the supported formats"
       params do
         requires :delimited_record, desc: "The delimited record."
@@ -55,7 +54,7 @@ module Recorder
           { data: json_table(table) }
         else
           status 422
-          { errors: {status: 422, title: "Could not parse record", messages: errors } }
+          { errors: { status: 422, title: "Could not parse record", messages: errors } }
         end
       end
 

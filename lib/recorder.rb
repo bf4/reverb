@@ -43,12 +43,12 @@ module Recorder
 
   def self.parse(delimited_record, delimiter: delimiter_for(delimited_record))
     csv_options = {
-              headers: true,
-              return_headers: false,
-              header_converters: :symbol,
-              converters: [string_field_converter, :date],
-              col_sep: delimiter,
-              skip_blanks: true
+      headers: true,
+      return_headers: false,
+      header_converters: :symbol,
+      converters: [string_field_converter, :date],
+      col_sep: delimiter,
+      skip_blanks: true
     }
     if File.readable?(delimited_record)
       delimited_record = File.read(delimited_record)

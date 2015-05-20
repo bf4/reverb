@@ -13,43 +13,37 @@ RSpec.describe Recorder::API, type: :web do
     end
 
     specify "as a single line of data" do
-      create_params = {delimited_record: delimited_record}
+      create_params = { delimited_record: delimited_record }
       post "/api/records", create_params
       expect(status_code).to eq(201)
       expect(response_body).to eq(
-        {
-          "data" => delimited_record,
-        }
+        "data" => delimited_record,
       )
     end
 
     specify "as a file" do
       file = Fixtures.fixture_path.join("output1.csv")
       rack_file = Rack::Test::UploadedFile.new(file)
-      create_params = {delimited_record: rack_file}
+      create_params = { delimited_record: rack_file }
       post "/api/records", create_params
 
       expect(status_code).to eq(201)
       expect(response_body).to eq(
-        {
-          "data" => Fixtures.get_record("output1.csv"),
-        }
+        "data" => Fixtures.get_record("output1.csv"),
       )
     end
 
     it "returns a 422 error when the table is not parseable" do
-      create_params = {delimited_record: "foo;bar"}
+      create_params = { delimited_record: "foo;bar" }
       post "/api/records", create_params
       expect(status_code).to eq(422)
       expect(response_body).to eq(
-        {
-          "errors" => {
-            "status" => 422,
-            "title" => "Could not parse record",
-            "messages" => [
-              "No delimiter found for foo;bar"
-            ]
-          }
+        "errors" => {
+          "status" => 422,
+          "title" => "Could not parse record",
+          "messages" => [
+            "No delimiter found for foo;bar"
+          ]
         }
       )
     end
@@ -57,46 +51,40 @@ RSpec.describe Recorder::API, type: :web do
 
   ## Output 1
   it "GET /records/gender" do
-    create_params = {delimited_record: Fixtures.get_record("record.csv")}
+    create_params = { delimited_record: Fixtures.get_record("record.csv") }
     post "/api/records", create_params
 
     get "/api/records/gender"
 
     expect(status_code).to eq(200)
     expect(response_body).to eq(
-      {
-        "data" => Fixtures.get_record("output1.csv"),
-      }
+      "data" => Fixtures.get_record("output1.csv"),
     )
   end
 
   ## Output 2
   it "GET /records/birthdate" do
-    create_params = {delimited_record: Fixtures.get_record("record.csv")}
+    create_params = { delimited_record: Fixtures.get_record("record.csv") }
     post "/api/records", create_params
 
     get "/api/records/birthdate"
 
     expect(status_code).to eq(200)
     expect(response_body).to eq(
-      {
-        "data" => Fixtures.get_record("output2.csv"),
-      }
+      "data" => Fixtures.get_record("output2.csv"),
     )
   end
 
   ## Output 3
   it "GET /records/name" do
-    create_params = {delimited_record: Fixtures.get_record("record.csv")}
+    create_params = { delimited_record: Fixtures.get_record("record.csv") }
     post "/api/records", create_params
 
     get "/api/records/name"
 
     expect(status_code).to eq(200)
     expect(response_body).to eq(
-      {
-        "data" => Fixtures.get_record("output3.csv"),
-      }
+      "data" => Fixtures.get_record("output3.csv"),
     )
   end
 
@@ -113,5 +101,4 @@ RSpec.describe Recorder::API, type: :web do
   def response_body
     JSON.load(response.body)
   end
-
 end

@@ -76,16 +76,16 @@ Coder,Rails,Female,Red,12/31/2000
   end
 
   def run_with_stubbed_loggers(argv)
-    stdout, stderr = stub_loggers(argv) do |_cli|
+    stdout, stderr = stub_loggers(argv) { |_cli|
       Recorder::Cli.run(argv)
-    end
+    }
     yield stdout, stderr
   end
 
   def parse_options_with_stubbed_loggers(argv)
-    stdout, stderr = stub_loggers(argv) do |cli|
+    stdout, stderr = stub_loggers(argv) { |cli|
       cli.parse_options!
-    end
+    }
     yield stdout, stderr
   end
 
