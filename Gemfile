@@ -3,6 +3,11 @@ source "https://rubygems.org"
 # skipping that for convenience of anyone running the code challenge.
 # ruby "2.2.2"
 
+gem "grape", "~> 0.11"
+gem "grape-entity"
+gem "roar"
+gem "grape-roar"
+
 group :development do
   # documentation
   gem "yard"
@@ -11,6 +16,8 @@ group :development do
 end
 
 group :test, :development do
+  gem "rack-test"
+
   gem "rspec", "~> 3.2"
   gem "bundler", "~> 1.7"
   gem "rake", "~> 10.0"
