@@ -32,6 +32,7 @@ module Recorder
         delimited_record = params[:delimited_record]
         record = delimited_record["filename"] ? delimited_record.tempfile : delimited_record
         table = builder.parse(record).last
+        builder.combine_records!
       rescue Recorder::Error => e
         errors << e.message
       else

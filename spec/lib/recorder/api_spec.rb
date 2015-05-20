@@ -6,6 +6,10 @@ RSpec.describe Recorder::API, type: :web do
     Recorder::API
   end
 
+  before do
+    allow(Recorder::API).to receive(:dao).and_return(Recorder::Builder.new)
+  end
+
   describe "POST /records" do
     let(:delimited_record) do
       "lastname,firstname,gender,favoritecolor,dateofbirth\n"\
