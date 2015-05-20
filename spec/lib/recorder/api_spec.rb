@@ -33,6 +33,21 @@ RSpec.describe Recorder::API, type: :web do
       )
     end
 
+    it "returns a 422 error when the field headers are missing" do
+      create_params = { delimited_record: "Last,Woman,Female,Venetian,2000-09-30\n" }
+      post "/api/records", create_params
+      expect(status_code).to eq(422)
+      expect(response_body).to eq(
+        "errors" => {
+          "status" => 422,
+          "title" => "Could not parse record",
+          "messages" => [
+            "Header fields must be included: #{Recorder.fields.join(',')}"
+          ]
+        }
+      )
+    end
+
     it "returns a 422 error when the table is not parseable" do
       create_params = { delimited_record: "foo;bar" }
       post "/api/records", create_params

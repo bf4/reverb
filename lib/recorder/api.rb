@@ -26,6 +26,7 @@ module Recorder
         table.to_csv
       end
 
+      # TECHDEBT: extract out error messages
       def table_from_params(params)
         errors = []
         delimited_record = params[:delimited_record]
@@ -36,6 +37,10 @@ module Recorder
           errors << e.message
         else
           raise
+        end
+      else
+        if table.headers.empty?
+          errors << "Header fields must be included: #{Recorder.fields.join(',')}".freeze
         end
       ensure
         return [table, errors]

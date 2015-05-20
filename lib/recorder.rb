@@ -56,6 +56,10 @@ module Recorder
     CSV.parse(delimited_record, csv_options)
   end
 
+  def self.fields
+    @fields ||= %w[LastName FirstName Gender FavoriteColor DateOfBirth]
+  end
+
   def self.delimiters
     @delimiters ||= ["|", ",", " "]
   end
