@@ -3,6 +3,7 @@ require "pathname"
 module Recorder
   autoload :Cli, File.expand_path("../recorder/cli", __FILE__)
   autoload :API, File.expand_path("../recorder/api", __FILE__)
+  Error = Class.new(StandardError)
 
   ROOT = Pathname File.expand_path("../..", __FILE__)
   private_constant :ROOT
@@ -70,7 +71,7 @@ module Recorder
         break row
       }
       first_row.size > 1
-    } or fail "No delimiter found for #{delimited_record}"
+    } or fail Error, "No delimiter found for #{delimited_record}"
   end
 
   # TECHDEBT: Move into own file
@@ -117,7 +118,7 @@ module Recorder
 
     class View
       def self.sort_order
-        fail "#{caller[0]} needs to implement #{__callee__}"
+        fail Error, "#{caller[0]} needs to implement #{__callee__}"
       end
 
       def self.format(table)
@@ -164,7 +165,7 @@ module Recorder
         when :desc
           field2 <=> field1
         else
-          fail "Unknown sort direction #{direction.inspect}"
+          fail Error, "Unknown sort direction #{direction.inspect}"
         end
       end
     end

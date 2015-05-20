@@ -75,7 +75,7 @@ RSpec.describe Recorder, type: :model do
       table = Recorder.parse(record)
       expect {
         view.format(table)
-      }.to raise_error(RuntimeError, /sort_order/)
+      }.to raise_error(Recorder::Error, /sort_order/)
     end
 
     it "fails when an unhandled sort_order" do
@@ -89,7 +89,7 @@ RSpec.describe Recorder, type: :model do
       table = Recorder.parse(record)
       expect {
         view.format(table)
-      }.to raise_error(RuntimeError, /unknown sort direction/i)
+      }.to raise_error(Recorder::Error, /unknown sort direction/i)
     end
 
     specify "Output1: sorted by gender (females before males) then by last name ascending" do # rubocop:disable Metrics/LineLength
