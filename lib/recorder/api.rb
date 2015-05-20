@@ -23,7 +23,7 @@ module Recorder
 
       # @return [String] csv representation of table
       def json_table(table)
-        table.to_csv.chomp
+        table.to_csv
       end
 
       def table_from_params(params)
@@ -43,6 +43,7 @@ module Recorder
     end
 
     resources :records do
+
       desc "Post a single data line in any of the supported formats"
       params do
         requires :delimited_record, desc: "The delimited record."
@@ -56,6 +57,30 @@ module Recorder
           status 422
           { errors: {status: 422, title: "Could not parse record", messages: errors } }
         end
+      end
+
+      desc "Output 1: returns records sorted by gender"
+      get "/gender" do
+        status 200
+        table = builder.records.last
+        formatted_table = Recorder::Views.format(table, 1)
+        { data: json_table(formatted_table) }
+      end
+
+      desc "Output 2: returns records sorted by birthdate "
+      get "/birthdate" do
+        status 200
+        table = builder.records.last
+        formatted_table = Recorder::Views.format(table, 2)
+        { data: json_table(formatted_table) }
+      end
+
+      desc "Output 3: returns records sorted by name"
+      get "/name" do
+        status 200
+        table = builder.records.last
+        formatted_table = Recorder::Views.format(table, 3)
+        { data: json_table(formatted_table) }
       end
     end
   end
