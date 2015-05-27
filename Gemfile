@@ -3,6 +3,9 @@ source "https://rubygems.org"
 # skipping that for convenience of anyone running the code challenge.
 # ruby "2.2.2"
 
+# app server
+gem "thin"
+# api DSL
 gem "grape", "~> 0.11"
 
 group :development do
