@@ -1,0 +1,102 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Recorder reverb",
+    "description": "coding challenge https://reverb.com/page/dev-challenge",
+    "termsOfService": "TBD",
+    "contact": {
+      "name": "Benjamin Fleischer",
+      "email": "github@benjaminfleischer.com",
+      "url": "https://github.com/bf4/reverb"
+    },
+    "license": {
+      "name": "All rights reserved",
+      "url": "http://example.com/"
+    }
+  },
+  "host": "localhost:9292",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+    ],
+  "consumes": [
+    "application/json"
+    ],
+  "produces": [
+    "application/json"
+    ],
+  "paths": {
+    "/records": {
+      "post": {
+        "tags": ["Record Operations"],
+        "summary": "Add a record",
+        "description": "Adds the given line to the existing csv",
+        "produces": [
+          "application/json"
+          ],
+        "operationId": "addLine",
+        "parameters": [
+        {
+          "name": "delimited_record",
+          "in": "body",
+          "description": "line to add",
+          "required": true,
+          "schema": {
+              "$ref": "#/definitions/Record"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "A collection of records.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Record"
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorModel"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Record": {
+      "required": [
+        "delimited_record"
+        ],
+      "properties": {
+        "delimited_record": {
+          "items": {
+            "type": "string"
+          },
+          "collectionFormat": "csv"
+        }
+      },
+      "example": {
+        "delimited_record": "HH David Male Ruby 1979-10-15"
+      }
+    },
+    "ErrorModel": {
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
