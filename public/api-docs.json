@@ -19,33 +19,36 @@
   "basePath": "/api",
   "schemes": [
     "http"
-    ],
+  ],
   "consumes": [
     "application/json"
-    ],
+  ],
   "produces": [
     "application/json"
-    ],
+  ],
   "paths": {
     "/records": {
       "post": {
-        "tags": ["Record Operations"],
+        "tags": [
+          "Record Operations"
+        ],
         "summary": "Add a record",
         "description": "Adds the given line to the existing csv",
         "produces": [
           "application/json"
-          ],
+        ],
         "operationId": "addLine",
         "parameters": [
-        {
-          "name": "delimited_record",
-          "in": "body",
-          "description": "line to add",
-          "required": true,
-          "schema": {
+          {
+            "name": "delimited_record",
+            "in": "body",
+            "description": "line to add",
+            "required": true,
+            "schema": {
               "$ref": "#/definitions/Record"
+            }
           }
-        }],
+        ],
         "responses": {
           "200": {
             "description": "A collection of records.",
@@ -63,14 +66,17 @@
             }
           }
         }
-      }
+      },
+      "parameters": [
+
+      ]
     }
   },
   "definitions": {
     "Record": {
       "required": [
         "delimited_record"
-        ],
+      ],
       "properties": {
         "delimited_record": {
           "items": {

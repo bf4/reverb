@@ -6,6 +6,8 @@ source "https://rubygems.org"
 gem "grape", "~> 0.11"
 
 group :development do
+  # https://github.com/swagger-rb/swagger-rb
+  gem "swagger-core"
   # documentation
   gem "yard"
   # style
