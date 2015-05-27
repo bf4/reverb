@@ -1,6 +1,7 @@
 require "pathname"
 
 module Recorder
+  autoload :App, File.expand_path("../recorder/app", __FILE__)
   autoload :Cli, File.expand_path("../recorder/cli", __FILE__)
   autoload :API, File.expand_path("../recorder/api", __FILE__)
   Error = Class.new(StandardError)
