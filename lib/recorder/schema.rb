@@ -33,22 +33,22 @@ module Recorder
       builder.paths = {
         "/records": {
           "post": {
-            "tags": ["Record Operations"],
+            "tags": [
+              "Record Operations"
+            ],
             "summary": "Add a record",
+            "operationId": "addRecord",
             "description": "Adds the given line to the existing csv",
             "produces": [
               "application/json"
             ],
-            "operationId": "addLine",
             "parameters": [
               {
                 "name": "delimited_record",
                 "in": "body",
                 "description": "line to add",
                 "required": true,
-                "schema": {
-                  "$ref": "#/definitions/Record"
-                }
+                "type": "file"
               }],
               "responses": {
                 "200": {
@@ -70,17 +70,31 @@ module Recorder
           }
         }
       }
+      version_header = {
+        name: "Accept-Version",
+        in: "header",
+        type: "string",
+        default: "v1",
+        pattern: "v[\\d\\.]+",
+        description: "The API version, e.g. 'v1'",
+      }
+      builder.paths.each do |_path, operations|
+        operations.each do |_action, operation|
+          next unless operation.respond_to?(:parameters)
+          operation.parameters << version_header
+        end
+      end
       builder.definitions =  {
         "Record": {
           "required": [
             "delimited_record"
           ],
           "properties": {
+
             "delimited_record": {
               "items": {
                 "type": "string"
               },
-              "collectionFormat": "csv"
             }
           },
           "example": {

@@ -33,20 +33,26 @@
           "Record Operations"
         ],
         "summary": "Add a record",
+        "operationId": "addRecord",
         "description": "Adds the given line to the existing csv",
         "produces": [
           "application/json"
         ],
-        "operationId": "addLine",
         "parameters": [
           {
             "name": "delimited_record",
             "in": "body",
             "description": "line to add",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/Record"
-            }
+            "type": "file"
+          },
+          {
+            "name": "Accept-Version",
+            "in": "header",
+            "type": "string",
+            "default": "v1",
+            "pattern": "v[\\d\\.]+",
+            "description": "The API version, e.g. 'v1'"
           }
         ],
         "responses": {
@@ -81,8 +87,7 @@
         "delimited_record": {
           "items": {
             "type": "string"
-          },
-          "collectionFormat": "csv"
+          }
         }
       },
       "example": {
